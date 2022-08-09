@@ -1,11 +1,7 @@
 module.exports = {
-  async redirects() {
-    return [
-      {
-        source: '/about',
-        destination: '/team',
-        permanent: false,
-      },
-    ];
+  i18n: {
+    locales: ['default', 'en', 'de'],
+    defaultLocale: 'default',
+    localeDetection: false,
   },
 };
