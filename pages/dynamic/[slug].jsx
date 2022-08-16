@@ -8,6 +8,11 @@ export default function About(props) {
       <h1>{slug}</h1>
       <p>page data: {pageData}</p>
       <p>
+        <Link href={'/dynamic/dynamic-to-nowhere'}>to dynamic nowhere</Link>
+        <br />
+        <Link href={'/to-nowhere'}>to nowhere</Link>
+      </p>
+      <p>
         <Link href={'/'}>Home</Link>
       </p>
     </section>
@@ -20,17 +25,21 @@ export async function getStaticPaths() {
       { params: { slug: 'foo' } },
       { params: { slug: 'bar' }, locale: 'de' },
     ],
-    fallback: 'blocking',
+    fallback: false,
   };
 }
 
 export async function getStaticProps({ params: { slug } }) {
   const pageData = await (
     await import(`../../staticData/pages.json`)
-  ).pages.filter((page) => page.slug === slug)[0].data;
+  ).pages.filter((page) => page.slug === slug)[0]?.data;
+
+  if (!pageData) {
+    return { notFound: true };
+  }
 
   return {
     // Passed to the page component as props
-    props: { slug, pageData },
+    props: { slug, pageData: pageData },
   };
 }
